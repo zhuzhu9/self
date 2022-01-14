@@ -64,7 +64,6 @@
 
 | 容器                               | 对应的迭代器类型 |
 | ---------------------------------- | ---------------- |
-| 容器                               | 对应的迭代器类型 |
 | array                              | 随机访问迭代器   |
 | deque                              | 随机访问迭代器   |
 | forward_list                       | 前向迭代器       |
@@ -101,3 +100,108 @@
 
 
 ![img](C++标准库和STL.assets\2-1P911110REB.jpg)
+
+##### vector
+
+​	源码使用了3个迭代器
+
+```c++
+
+template <class _Ty, class _Alloc = allocator<_Ty>>
+class vector {
+protected:
+    pointer _Myfirst;
+    pointer _Mylast;
+    pointer _Myend;
+};
+```
+
+\_Myfirst指向了vector容器对象的起始位置，\_Mylast指向了当前最后一个元素的末尾，\_Myend指向了容器占用内存的末尾。
+
+![vector1](C++标准库和STL.assets\vector1.png)
+
+通过3个可以灵活的表达容器中的信息，
+
+- \_Myfirst 和 \_Mylast 可以用来表示 vector 容器中目前已被使用的内存空间。
+- \_Mylast 和 \_Myend 可以用来表示 vector 容器目前空闲的内存空间。
+- \_Myfirst 和 \_Myend 可以用表示 vector 容器的容量。
+- 对于空的 vector 容器,由于没有任何元素的空间分配,因此 \_Myfirst、\_Mylast 和 \_Myend 均为NULL。
+
+
+
+##### deque
+
+- deque在头尾增删O(1)
+- 也可以自身修改容量和大小
+
+**deque不能保证所有元素都存储到连续的内存空间中。**当需要向序列两端频繁的添加或删除元素时，应该首选deque容器。
+
+deque容器存储数据是由一段一段等长的连续空间构成的，
+
+![image-20220114190722761](C++标准库和STL.assets\image-20220114190722761.png)
+
+迭代器代码
+
+```c++
+template<class T, ...>
+struct __deque_iteator{
+    ...
+    T* cur;
+    T* first;
+    T* last;
+    map_pointer node; // map_pointer 等价于 T**
+}
+```
+
+- cur：指向当前正在遍历的元素
+- first：指向当前连续空间的首地址
+- last：指向当前连续空间的末尾地址
+- node：它是一个二级指针，用于指向map数组中存储的指向当前连续空间的指针
+
+**deque容器**
+
+```c++
+//_Alloc为内存分配器
+template<class _Ty, class _Alloc = allocator<_Ty>>
+class deque{
+protected:
+	iterator start;
+    iterator finish;
+    map_pointer map;
+}
+```
+
+2个deque迭代器和1个map数组，start迭代器记录map数组中首个连续空间的信息，finish迭代器记录map数组中最后一个连续空间的信息。
+
+**注：**deque迭代器，和普通的deque迭代器不同，start迭代器中的cur指针指向的是连续空间中首个元素；finish迭代器，中的cur指针指向的是连续空间中最后一个元素的下一个位置。
+
+![image-20220114194208845](C++标准库和STL.assets\image-20220114194208845.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
