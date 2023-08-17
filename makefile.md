@@ -28,13 +28,13 @@ gcc fun.c main.c -o main
 
 add:main.c add.c
 
-​	gcc $^ -o $@
+​	gcc \$^ -o \$@
 
 **写一个makefile，实现三个数获取最大值 gcc main.c max.c -o max**
 
 max:main.c max.c
 
-​	gcc $^ -o $@
+​	gcc \$^ -o \$@
 
 指定执行文件的时候 make 文件对象（make add或make max）
 
